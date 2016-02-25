@@ -1,8 +1,9 @@
 Mkit: Internet Measurement arsenal for data inference and algorithms
 ====================================================================
+Mkit is a consequence of the discussions at the AIMS 2016 organised by CAIDA and [this talk](http://www.caida.org/workshops/aims/1602/slides/aims1602_pgill.pdf) by Dr. Phillipa Gill.
+Mkit is a library that facilitates the use of measurement data and provides implementation of common old/new algorithms for Internet measurement data inference.
+Mkit would provide the implementation of the common denominator of tasks in terms of the tools the Internet community uses in their everyday work.
 
-Mkit is a library that facilitates the use of measurement data and provides implementation of old/new algorithms for data inference.
-M-kit would provide the implementation of the common denominator in terms of the tools the Internet community uses in their everyday work.
 As of now, we have APIs for the following:
 * RIPE Atlas meta-data (measurement and probes)
 * Parsing RIPE traceroute data
@@ -38,5 +39,15 @@ While this list is incomplete:
 Coming Soon!
 
 ## AMP
-1. All traceroute streams (src, dst): http://www.wand.net.nz/~salcock/amp-traceroute/amp-traceroute.streams.gz
+* All traceroute streams (src, dst): http://www.wand.net.nz/~salcock/amp-traceroute/amp-traceroute.streams.gz
 
+API Features and Design Document (work in progress)
+==================================================
+[Feature set of Mkit document](https://docs.google.com/document/d/1f0UHg65gaJ_5GElTd3AZWLSEnFNMuliHsm75EOvsa3g/edit?usp=sharing)
+
+## Code Credits
+* [Emile Aben](https://github.com/emileaben): much of RIPE Atlas parsing code inspired from [IXP-Country_Jedi](https://github.com/emileaben/ixp-country-jedi)
+
+## Authors
+* [Rachee Singh](www.racheesingh.com/about) (SBU)
+* [Phillipa Gill](http://www3.cs.stonybrook.edu/~phillipa/) (SBU)
