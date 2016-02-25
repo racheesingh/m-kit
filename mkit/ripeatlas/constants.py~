@@ -1,0 +1,2 @@
+DATA_DIR = "data/"
+RIPE_PROBE_DATA = "data/20160223.json"
