@@ -1,6 +1,6 @@
 Mkit: Internet Measurement arsenal for data inference and algorithms
 ====================================================================
-Mkit is a consequence of the discussions at the [AIMS 2016](http://www.caida.org/workshops/aims/1602/) organised by CAIDA and
+Mkit is a consequence of the discussions at [AIMS 2016](http://www.caida.org/workshops/aims/1602/) organised by CAIDA and
 [this talk](http://www.caida.org/workshops/aims/1602/slides/aims1602_pgill.pdf) by Dr. Phillipa Gill.
 Mkit is a library that facilitates the use of measurement data and provides implementation of common old/new algorithms for Internet measurement data inference.
 It would implement the common denominator of tasks in terms of the tools the Internet measurement community uses in their everyday work.
