@@ -18,8 +18,7 @@ But we are actively working towards completing the APIs for parsing other datase
 
 Common Datasets in Internet Measurement and related sub-domains
 ===============================================================
-While this list is incomplete:
-
+While this list is incomplete,
 ## CAIDA Datasets
 * [Prefix to AS](http://data.caida.org/datasets/routing/routeviews-prefix2as/)
 * [AS relationships Dataset](http://data.caida.org/datasets/as-relationships/serial-1/)
@@ -45,8 +44,12 @@ API Features and Design Document (work in progress)
 ==================================================
 [Feature set of Mkit document](https://docs.google.com/document/d/1f0UHg65gaJ_5GElTd3AZWLSEnFNMuliHsm75EOvsa3g/edit?usp=sharing)
 
+Installation
+============
+* `python setup.py install`
+
 ## Code Credits
-* [Emile Aben](https://github.com/emileaben): much of RIPE Atlas parsing code inspired from [IXP-Country_Jedi](https://github.com/emileaben/ixp-country-jedi)
+* [Emile Aben](https://github.com/emileaben): much of RIPE Atlas parsing code inspired from [IXP-Country-Jedi](https://github.com/emileaben/ixp-country-jedi)
 
 ## Authors
 * [Rachee Singh](www.racheesingh.com/about) (SBU)
