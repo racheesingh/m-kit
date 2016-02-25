@@ -19,24 +19,24 @@ Common Datasets in Internet Measurement and related sub-domains
 ===============================================================
 While this list is incomplete:
 
-## CAIDA Datasets:
+## CAIDA Datasets
 * [Prefix to AS](http://data.caida.org/datasets/routing/routeviews-prefix2as/)
 * [AS relationships Dataset](http://data.caida.org/datasets/as-relationships/serial-1/)
 * [Ark Topology Dataset](http://www.caida.org/data/active/ipv4_routed_24_topology_dataset.xml)
 
-## RIPE Atlas:
+## RIPE Atlas
 * [Anchoring Measurements](https://labs.ripe.net/Members/suzanne_taylor_muzzin/announcing-the-ripe-atlas-anchors-service)
 * Emile's [Measuring More Internet](https://labs.ripe.net/Members/emileaben/measuring-more-internet-with-ripe-atlas)
 * [Probe Meta-datasets](http://ftp.ripe.net/ripe/atlas/probes/archive/2016/)
 * All the others available via Mkit or RIPE's own [REST API](https://labs.ripe.net/ripe-database/database-api/api-documentation)
 
-## [Iplane:](http://iplane.cs.washington.edu/)
+## [Iplane](http://iplane.cs.washington.edu/)
 * [PL-PL traceroutes](http://revtr.cs.washington.edu/pl_pl_traceroutes/)
 * [Daily traceroutes](http://iplane.cs.washington.edu/data/today/traces_2016_02_23.tar.gz)
 
-## [perfSONAR:](http://www.perfsonar.net/about/)
+## [perfSONAR](http://www.perfsonar.net/about/)
 Coming Soon!
 
-## AMP:
+## AMP
 1. All traceroute streams (src, dst): http://www.wand.net.nz/~salcock/amp-traceroute/amp-traceroute.streams.gz
 
