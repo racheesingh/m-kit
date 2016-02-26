@@ -11,7 +11,8 @@ def getlinktype( numASHop1, numASHop2 ):
         return 'i'
     return 'd'
 
-def traceroute_to_aspath(data, src_asn):
+def traceroute_to_aspath(data):
+    src_asn = ip2asn.ip2asn_bgp(data['from'])
     aslinks = {'_nodes': set(), '_links': [] }
     if 'result' in data:
         res = data['result']
@@ -37,14 +38,16 @@ def traceroute_to_aspath(data, src_asn):
             this_hop_ases = set()
             for ip in ips:
                 asn = ip2asn.ip2asn_bgp(ip)
-                this_hop_ases.add(asn)
-                        
+                if asn:
+                    this_hop_ases.add(asn)
             if len(this_hop_ases) == 1 and len(last_resp_hop_ases) == 1:
                 this_asn = list(this_hop_ases)[0]
                 last_asn = list(last_resp_hop_ases)[0]
                 if this_asn != last_asn:
                     ixps = [ixp_radix.search_best(x) for x in ips]
                     if any(ixps):
+                        print "Found IXP %s, continue" % ixps[0].data["name"]
+                        this_hop_ases = None
                         continue
                     link_type = getlinktype(last_resp_hop_nr, this_resp_hop_nr)
                     link = { 'src': last_asn,
@@ -63,13 +66,15 @@ def traceroute_to_aspath(data, src_asn):
                     
     if not aslinks['_links']:
         return aslinks
-    
+
     # Many times, the first hop address is a local (non-routable) prefix, so
     # prepending src_asn to the AS level path since we know for sure that the traceroute
     # originated from src_asn
     if aslinks['_links'][0]['src'] != str(src_asn):
-        aslinks['_links'] = [{'src':src_asn, 'dst':aslinks['_links'][0]['src'], 'type':'i'}] + \
-                            aslinks['_links']
+        aslinks['_nodes'].add(src_asn)
+        aslinks['_links'] = [{'src':str(src_asn),
+                              'dst':aslinks['_links'][0]['src'], 'type':'i'}] + \
+                              aslinks['_links']
     
     # This code block short circuits paths like A->B->C->B->D to A->B->D
     # Also A->B->A->C->D should become A->C->D.
@@ -79,13 +84,13 @@ def traceroute_to_aspath(data, src_asn):
         if delnext:
             delnext = False
             continue
-    if (index + 1) < len(aslinks['_links']):
-        if aslinks['_links'][index]['src'] == aslinks['_links'][index+1]['dst']:
-            delnext = True
+        if (index + 1) < len(aslinks['_links']):
+            if aslinks['_links'][index]['src'] == aslinks['_links'][index+1]['dst']:
+                delnext = True
+            else:
+                linkssane.append(aslinks['_links'][index])
         else:
             linkssane.append(aslinks['_links'][index])
-    else:
-        linkssane.append(aslinks['_links'][index])
             
     loopdetect = []
     for link in linkssane:

@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import constants
 import radix
 
 # List of IXP ASNs

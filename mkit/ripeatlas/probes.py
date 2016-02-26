@@ -53,5 +53,5 @@ def get_probe_asn(prb_id):
 all_probes = init_probset()
 probes_by_id = {}
 for pr in all_probes:
-    probes_by_id[pr['prb_id']] = pr
+    probes_by_id[pr['id']] = pr
     

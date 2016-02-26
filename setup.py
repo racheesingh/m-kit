@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mkit",
-    version='1.0',
+    version='1.01',
     description="Internet Measurement Toolkit",
     author="Rachee Singh",
     author_email="racsingh@cs.stonybrook.edu",
