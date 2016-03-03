@@ -21,6 +21,10 @@ def remove_ixps(data):
     new_links = []
     connecting_link = {}
     for link in links:
+        if 'src' in connecting_link and 'dst' in connecting_link:
+            connecting_link['type'] = 'i'
+            new_links.append(connecting_link)
+            connecting_link = {}
         if link['dst'] in ixps:
             assert 'src' not in connecting_link
             connecting_link['src'] = link['src']
@@ -29,10 +33,6 @@ def remove_ixps(data):
             connecting_link['dst'] = link['dst']
         else:
             new_links.append(link)
-            if 'src' in connecting_link and 'dst' in connecting_link:
-                connecting_link['type'] = 'i'
-                new_links.append(connecting_link)
-                connecting_link = {}
     return new_links
 
 ixp_radix = radix.Radix()
