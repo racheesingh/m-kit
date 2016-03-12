@@ -42,6 +42,8 @@ def parse_iplane_file(dirName, fName):
                         continue
                     asn = ip2asn.ip2asn_bgp(dest)
                     if asn:
+                        if asn in ixp.IXPs:
+                            continue
                         aspath = []
                         current_dest = asn
             elif current_dest:

@@ -3,8 +3,13 @@ import constants
 import pdb
 import ip_to_asn as ip2asn
 import ixp
+import radix
 
 ixp_radix = ixp.ixp_radix
+private_addr_radix = radix.Radix()
+private_adrs = ['192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12']
+for addr in private_adrs:
+    private_addr_radix.add(addr)
 
 def getlinktype( numASHop1, numASHop2 ):
     if numASHop2 - numASHop1 > 1:
@@ -37,16 +42,19 @@ def traceroute_to_aspath(data):
                             ips.add(hr['from'])
             this_hop_ases = set()
             for ip in ips:
+                if private_addr_radix.search_best(ip):
+                    continue
                 asn = ip2asn.ip2asn_bgp(ip)
                 if asn:
                     this_hop_ases.add(asn)
+            # Trying this out
+            this_hop_ases = list(this_hop_ases)[:1]
             if len(this_hop_ases) == 1 and len(last_resp_hop_ases) == 1:
                 this_asn = list(this_hop_ases)[0]
                 last_asn = list(last_resp_hop_ases)[0]
                 if this_asn != last_asn:
                     ixps = [ixp_radix.search_best(x) for x in ips]
                     if any(ixps):
-                        print "Found IXP %s, continue" % ixps[0].data["name"]
                         this_hop_ases = None
                         continue
                     link_type = getlinktype(last_resp_hop_nr, this_resp_hop_nr)
@@ -70,11 +78,12 @@ def traceroute_to_aspath(data):
     # Many times, the first hop address is a local (non-routable) prefix, so
     # prepending src_asn to the AS level path since we know for sure that the traceroute
     # originated from src_asn
-    if aslinks['_links'][0]['src'] != str(src_asn):
-        aslinks['_nodes'].add(src_asn)
-        aslinks['_links'] = [{'src':str(src_asn),
-                              'dst':aslinks['_links'][0]['src'], 'type':'i'}] + \
-                              aslinks['_links']
+    if src_asn:
+        if aslinks['_links'][0]['src'] != str(src_asn):
+            aslinks['_nodes'].add(src_asn)
+            aslinks['_links'] = [{'src':str(src_asn),
+                                  'dst':aslinks['_links'][0]['src'], 'type':'i'}] + \
+                aslinks['_links']
     
     # This code block short circuits paths like A->B->C->B->D to A->B->D
     # Also A->B->A->C->D should become A->C->D.
