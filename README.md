@@ -5,6 +5,8 @@ Mkit is a consequence of the discussions at [AIMS 2016](http://www.caida.org/wor
 Mkit is a library that facilitates the use of measurement data and provides implementation of common old/new algorithms for Internet measurement data inference.
 It would implement the common denominator of tasks in terms of the tools the Internet measurement community uses in their everyday work.
 
+Note: As of now, I write code for M-kit as and when my research allows me to, so you might find bugs. Feel free to fix them or open an issue so I can take a look at it!
+
 As of now, we have APIs for the following:
 * RIPE Atlas meta-data (measurement and probes) processing ("Active IPV4 probes in UK?", "Active probes in AS174?")
 * Parsing RIPE traceroute data
