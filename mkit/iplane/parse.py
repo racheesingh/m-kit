@@ -56,6 +56,8 @@ def parse_iplane_file(dirName, fName):
                         continue
                     asn = ip2asn.ip2asn_bgp(hop)
                     if asn:
+                        if asn in ixp.IXPs:
+                            continue
                         aspath = aspath + [asn]
                     
     return as_paths_dict
@@ -75,6 +77,7 @@ def get_iplane_graphs(dates):
     for dName, files in dir_files.iteritems():
         for f in files:
             results.append( pool.apply_async( parse_iplane_file, args=(dName,f) ) )
+            #parse_iplane_file(dName, f)
 
     pool.close()
     pool.join()
