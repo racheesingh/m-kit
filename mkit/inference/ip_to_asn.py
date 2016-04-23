@@ -18,7 +18,12 @@ with open(constants.PFX2ASN_DATA) as fi:
 
 ai = pygeoip.GeoIP( constants.MAXMIND_DB, pygeoip.MEMORY_CACHE)
 def ip2asn_bgp(ip):
-    node = rtree_bgp.search_best(ip)
+    try:
+        node = rtree_bgp.search_best(ip)
+    except ValueError:
+        print "Could not get AS for IP", ip
+        return None
+
     if node:
         return node.data['asn']
     else:

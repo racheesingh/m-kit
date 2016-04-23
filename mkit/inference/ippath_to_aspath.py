@@ -28,6 +28,7 @@ def traceroute_to_aspath(data):
         for hop in res:
             if 'hop' not in hop:
                 print "No hop info in", hop
+                return {'_nodes': set(), '_links': [] }
                     
             if this_hop_ases and len(this_hop_ases) > 0:
                 last_resp_hop_ases = this_hop_ases

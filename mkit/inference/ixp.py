@@ -13,8 +13,8 @@ def remove_ixps(data):
     links = data['_links']
     # First node is an IXP (don't know how and why), cut that edge out
     if links[0]['src'] in IXPs:
-        links = links[1:]
         nodes.remove(links[0]['src'])
+        links = links[1:]
     if set( nodes ).isdisjoint(set(IXPs)):
         return links
         
