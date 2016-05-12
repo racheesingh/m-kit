@@ -31,10 +31,8 @@ def parse_iplane_file(dirName, fName):
                 if match:
                     # Add previous AS path to dictionary
                     if current_dest and aspath and current_dest in as_paths_dict:
-                        aspath = [k for k,g in groupby(aspath)]
                         as_paths_dict[current_dest].append(aspath)
                     elif current_dest and aspath:
-                        aspath = [k for k,g in groupby(aspath)]
                         as_paths_dict[current_dest] = [aspath]
                     dest = match.group(0)
                     ixp_match = ixp.ixp_radix.search_best(dest)
@@ -46,7 +44,14 @@ def parse_iplane_file(dirName, fName):
                             continue
                         aspath = []
                         current_dest = asn
+                        current_hop_nr = None
+                        last_hop_nr = None
+                        current_asn = None
+                        prev_asn = None
             elif current_dest:
+                last_hop_nr = current_hop_nr
+                prev_asn = current_asn
+
                 # If current destination is not set, what could we even gather a path towards?
                 match = re.search(ipRegex, line)
                 if match:
@@ -58,8 +63,15 @@ def parse_iplane_file(dirName, fName):
                     if asn:
                         if asn in ixp.IXPs:
                             continue
-                        aspath = aspath + [asn]
-                    
+                        current_asn = asn
+                        current_hop_nr = int(line.split(':')[0])
+                        if prev_asn and current_asn and prev_asn != current_asn:
+                            if current_hop_nr - last_hop_nr == 1:
+                                linktype = 'd'
+                            else:
+                                linktype = 'i'
+                            link = (int(prev_asn), int(current_asn), linktype)
+                            aspath.append(link)
     return as_paths_dict
 
 def get_iplane_graphs(dates):
@@ -77,7 +89,7 @@ def get_iplane_graphs(dates):
     for dName, files in dir_files.iteritems():
         for f in files:
             results.append( pool.apply_async( parse_iplane_file, args=(dName,f) ) )
-            #parse_iplane_file(dName, f)
+            parse_iplane_file(dName, f)
 
     pool.close()
     pool.join()
