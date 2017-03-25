@@ -22,10 +22,6 @@ def remove_ixps(data):
     new_links = []
     connecting_link = {}
     for link in links:
-        if 'src' in connecting_link and 'dst' in connecting_link:
-            connecting_link['type'] = 'i'
-            new_links.append(connecting_link)
-            connecting_link = {}
         if link['dst'] in ixps:
             assert 'src' not in connecting_link
             connecting_link['src'] = link['src']
@@ -34,13 +30,31 @@ def remove_ixps(data):
             connecting_link['dst'] = link['dst']
         else:
             new_links.append(link)
+        if 'src' in connecting_link and 'dst' in connecting_link:
+            connecting_link['type'] = 'i'
+            new_links.append(connecting_link)
+            connecting_link = {}
     return new_links
 
 ixp_radix = radix.Radix()
-with open(constants.IXP_DATA_PEERINGDB) as fi:
+
+# Old IXP mapping, got a new one with PCH + PDB
+# with open(constants.IXP_DATA_PEERINGDB) as fi:
+#     for line in fi:
+#         tokens = line.split('\t')
+#         if ':' in tokens[-1]:
+#             continue
+#         node = ixp_radix.add(tokens[-1].split('\n')[0])
+#         node.data["name"] = tokens[0]
+import pdb
+with open(constants.IXP_ALL) as fi:
     for line in fi:
-        tokens = line.split('\t')
+        tokens = line.split(',')
+        if tokens[0] == 'name': continue
         if ':' in tokens[-1]:
             continue
-        node = ixp_radix.add(tokens[-1].split('\n')[0])
+        try:
+            node = ixp_radix.add(tokens[-1].strip())
+        except ValueError:
+            print "Could not add", tokens
         node.data["name"] = tokens[0]

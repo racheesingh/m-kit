@@ -31,15 +31,16 @@ def parse_iplane_file(dirName, fName):
                 if match:
                     # Add previous AS path to dictionary
                     if current_dest and aspath and current_dest in as_paths_dict:
-                        as_paths_dict[current_dest].append(aspath)
+                        as_paths_dict[(current_dest, dst_prefix)].append(aspath)
                     elif current_dest and aspath:
-                        as_paths_dict[current_dest] = [aspath]
+                        as_paths_dict[(current_dest, dst_prefix)] = [aspath]
                     dest = match.group(0)
                     ixp_match = ixp.ixp_radix.search_best(dest)
                     if ixp_match:
                         continue
+                    rnode = ip2asn.ip_to_pref(dest)
                     asn = ip2asn.ip2asn_bgp(dest)
-                    if asn:
+                    if asn and rnode:
                         if asn in ixp.IXPs:
                             continue
                         aspath = []
@@ -48,6 +49,7 @@ def parse_iplane_file(dirName, fName):
                         last_hop_nr = None
                         current_asn = None
                         prev_asn = None
+                        dst_prefix = rnode.prefix.replace('/', '_')
             elif current_dest:
                 last_hop_nr = current_hop_nr
                 prev_asn = current_asn
@@ -89,18 +91,50 @@ def get_iplane_graphs(dates):
     for dName, files in dir_files.iteritems():
         for f in files:
             results.append( pool.apply_async( parse_iplane_file, args=(dName,f) ) )
-            parse_iplane_file(dName, f)
+            #parse_iplane_file(dName, f)
 
     pool.close()
     pool.join()
     output = [ p.get() for p in results ]
     dest_based_as_paths = {}
     for op in output:
-        for dst_asn, aspaths in op.iteritems():
+        for tup, aspaths in op.iteritems():
+            dst_asn = tup[0]
             if not dst_asn in dest_based_as_paths:
                 dest_based_as_paths[dst_asn] = aspaths
             else:
                 dest_based_as_paths[dst_asn].extend(aspaths)
+    return dest_based_as_paths
+
+
+def get_iplane_prefix_graphs(dates):
+    dir_files = {}
+    for date in [dates]:
+        dirName = "traces_" + date 
+        dir_path = os.path.join(constants.IPLANE_DATA, dirName)
+        files = [x for x in os.listdir(dir_path) if
+                 os.path.isfile(os.path.join(dir_path, x))]
+        files = [os.path.join(dir_path, f) for f in files]
+        dir_files[ dirName ] = files
+    
+    results = []
+    pool = mp.Pool(processes=32)
+    for dName, files in dir_files.iteritems():
+        for f in files:
+            results.append( pool.apply_async( parse_iplane_file, args=(dName,f) ) )
+            #parse_iplane_file(dName, f)
+
+    pool.close()
+    pool.join()
+    output = [ p.get() for p in results ]
+    dest_based_as_paths = {}
+    for op in output:
+        for tup, aspaths in op.iteritems():
+            dst_prefix = tup[1]
+            if not tup in dest_based_as_paths:
+                dest_based_as_paths[tup] = aspaths
+            else:
+                dest_based_as_paths[tup].extend(aspaths)
     return dest_based_as_paths
 
 

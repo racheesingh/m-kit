@@ -7,7 +7,8 @@ API_HOST = 'https://atlas.ripe.net'
 API_MMT_URI = 'api/v1/measurement'
 
 def mmt_info(msm):
-    url = "%s/%s/%d" % (API_HOST, API_MMT_URI, msm)
+    url = "%s/%ss/?id=%d" % (API_HOST, API_MMT_URI, msm)
+    print url
     try:
         conn = urllib2.urlopen( url )
     except:
@@ -33,7 +34,7 @@ def parse_msm_trcrt(msm_id, start=None, end=None, count=None):
     if not start and not end:
         args = dict(format="txt")
     else:
-        args = dict(format="txt", start=start, end=end)
+        args = dict(format="txt", start=start, stop=end)
 
     url_for_msm = "%s/%s/%d/result/?%s" % \
                   (API_HOST, API_MMT_URI, msm_id, urllib.urlencode(args))
