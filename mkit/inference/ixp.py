@@ -8,7 +8,7 @@ IXPs = [ '1200',  '4635',  '5507', '6695', '7606', '8714', '9355', '9439', '9560
          '9722', '9989', '11670', '17819', '18398', '21371', '24029', '24115',
          '24990', '35054', '40633', '42476', '43100', '47886', '48850', '55818' ]
 
-def remove_ixps(data):
+def remove_ixps(data, keepixp=True):
     nodes = data['_nodes']
     links = data['_links']
     # First node is an IXP (don't know how and why), cut that edge out
